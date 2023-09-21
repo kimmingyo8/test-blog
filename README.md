@@ -2,5 +2,6 @@
 
 ## Stacks
 
-react typescript firebase
-# blog
+react
+typescript
+firebase
