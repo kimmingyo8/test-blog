@@ -1,11 +1,26 @@
+import { app } from 'firebaseApp';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function SignupForm() {
   const [error, setError] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const auth = getAuth(app);
+      await createUserWithEmailAndPassword(auth, email, password);
+      toast.success('회원가입에 성공했습니다.');
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.code);
+    }
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -36,7 +51,7 @@ export default function SignupForm() {
     }
 
     if (name === 'password_confirm') {
-      setPassword(value);
+      setPasswordConfirm(value);
       if (value?.length < 8) {
         setError('비밀번호는 8자리 이상으로 입력해주세요.');
       } else if (value !== password) {
@@ -48,7 +63,7 @@ export default function SignupForm() {
   };
   return (
     <main>
-      <form action="/post" method="POST" className="form form--lg">
+      <form onSubmit={onSubmit} className="form form--lg">
         <h1 className="form__title">회원가입</h1>
         <div className="form__block">
           <label htmlFor="email">이메일</label>
