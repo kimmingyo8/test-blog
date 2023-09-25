@@ -1,5 +1,7 @@
+import AuthContext from 'context/AuthContext';
 import { getAuth, signOut } from 'firebase/auth';
 import { app } from 'firebaseApp';
+import { useContext } from 'react';
 import { toast } from 'react-toastify';
 
 const onSignOut = async () => {
@@ -14,17 +16,15 @@ const onSignOut = async () => {
 };
 
 export default function Profile() {
-  const auth = getAuth(app);
+  const { user } = useContext(AuthContext);
 
   return (
     <section className="profile__box">
       <ul className="flex__box-lg">
         <li className="profile__image" />
         <li className="profile-info">
-          <p className="profile-info__email">{auth?.currentUser?.email}</p>
-          <p className="profile-info__name">
-            {auth?.currentUser?.displayName || '사용자'}
-          </p>
+          <p className="profile-info__email">{user?.email}</p>
+          <p className="profile-info__name">{user?.displayName || '사용자'}</p>
         </li>
       </ul>
       <button onClick={onSignOut} className="profile__logout">
