@@ -1,14 +1,42 @@
-import { useState } from 'react';
+import AuthContext from 'context/AuthContext';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from 'firebaseApp';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 interface PostListProps {
   hasNavigation?: boolean;
 }
 
+interface PostProps {
+  id: string;
+  title: string;
+  email: string;
+  summary: string;
+  content: string;
+  createdAt: string;
+}
+
 type TabType = 'all' | 'my';
 
 export default function PostList({ hasNavigation = true }: PostListProps) {
   const [activeTab, setActiveTab] = useState<TabType>('all');
+  const [posts, setPosts] = useState<PostProps[]>([]);
+  const { user } = useContext(AuthContext);
+
+  const getPosts = async () => {
+    const data = await getDocs(collection(db, 'posts'));
+
+    data?.forEach((doc) => {
+      const postDataObj = { ...doc.data(), id: doc.id };
+      setPosts((prev) => [...prev, postDataObj as PostProps]);
+    });
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   return (
     <>
       {hasNavigation && (
@@ -31,28 +59,30 @@ export default function PostList({ hasNavigation = true }: PostListProps) {
       )}
       <section className="post__list">
         <h1 className="a11y-hidden">게시글 목록</h1>
-        {[...Array(10)].map((e, index) => (
-          <div key={index} className="post__box">
-            <Link to={`/posts/${index}`}>
-              <ul className="post__profile-box">
-                <li className="post__profile" />
-                <li className="post__author-name">김민교</li>
-                <li className="post__date">2023.9.19 화요일</li>
-              </ul>
-              <h2 className="post__title">게시글 {index}</h2>
-              <p className="post__text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus doloribus sed, maiores aliquam rem tempora
-                voluptatibus error reprehenderit. Amet ratione placeat nobis
-                velit dolorum! Quaerat rerum odit velit deleniti rem!
-              </p>
-              <ul className="post__utils-box">
-                <li className="post__delete">삭제</li>
-                <li className="post__edit">수정</li>
-              </ul>
-            </Link>
-          </div>
-        ))}
+        {posts?.length > 0
+          ? posts?.map((post, index) => (
+              <div key={post?.id} className="post__box">
+                <Link to={`/posts/${post?.id}`}>
+                  <ul className="post__profile-box">
+                    <li className="post__profile" />
+                    <li className="post__author-name">{post?.email}</li>
+                    <li className="post__date">{post?.createdAt}</li>
+                  </ul>
+                  <h2 className="post__title">{post?.title}</h2>
+                  <p className="post__text">{post?.content}</p>
+                </Link>
+
+                {post?.email === user?.email && (
+                  <ul className="post__utils-box">
+                    <li className="post__delete">삭제</li>
+                    <li className="post__edit">
+                      <Link to={`/posts/edit/${post?.id}`}>수정</Link>
+                    </li>
+                  </ul>
+                )}
+              </div>
+            ))
+          : '게시글이 없습니다.'}
       </section>
     </>
   );
