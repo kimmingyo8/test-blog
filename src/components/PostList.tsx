@@ -8,7 +8,7 @@ interface PostListProps {
   hasNavigation?: boolean;
 }
 
-interface PostProps {
+export interface PostProps {
   id: string;
   title: string;
   email: string;
@@ -70,7 +70,7 @@ export default function PostList({ hasNavigation = true }: PostListProps) {
                   <li className="post__date">{post?.createdAt}</li>
                 </ul>
                 <h2 className="post__title">{post?.title}</h2>
-                <p className="post__text">{post?.content}</p>
+                <p className="post__text">{post?.summary}</p>
               </Link>
 
               {post?.email === user?.email && (
