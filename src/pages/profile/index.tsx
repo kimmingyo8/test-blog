@@ -9,7 +9,7 @@ export default function ProfilePage() {
       <Header />
       <main>
         <Profile />
-        <PostList hasNavigation={false} />
+        <PostList hasNavigation={false} defaultTab="my" />
       </main>
       <Footer />
     </>
