@@ -45,6 +45,9 @@ export default function PostDetail() {
               <li className="post__date">{post?.createdAt}</li>
             </ul>
             <ul className="post__utils-box">
+              {post?.category && (
+                <li className="post__category">{post?.category}</li>
+              )}
               <li className="post__delete" onClick={handleDelete}>
                 삭제
               </li>

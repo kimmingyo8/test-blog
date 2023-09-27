@@ -227,6 +227,15 @@ footer a:hover {
   white-space: pre-wrap;
 }
 
+.post__category {
+  color: gray;
+  border: 1px solid lightgray;
+  background: #f2f2f2;
+  padding: 0px 4px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
 /* profile */
 .profile__box {
   display: flex;
@@ -486,6 +495,20 @@ input:checked + .carousel__slide-container .nav button {
 
 .form__error {
   color: red;
+}
+
+.form select {
+  border: 1px solid lightgray;
+  max-width: 680px;
+  height: 40px;
+  padding: 0px 20px;
+  border-radius: 0.3rem;
+  box-sizing: border-box;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='4 9 12 18 20 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
 }
 
 /* loader */
