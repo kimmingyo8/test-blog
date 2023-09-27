@@ -5,6 +5,7 @@ import { deleteDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from 'firebaseApp';
 import Loader from './Loader';
 import { toast } from 'react-toastify';
+import Comments from './Comments';
 
 export default function PostDetail() {
   const [post, setPost] = useState<PostProps | null>(null);
@@ -37,26 +38,29 @@ export default function PostDetail() {
     <>
       <main className="post__detail">
         {post ? (
-          <section className="post__box">
-            <h1 className="post__title">{post?.title}</h1>
-            <ul className="post__profile-box">
-              <li className="post__profile" />
-              <li className="post__author-name">{post?.email}</li>
-              <li className="post__date">{post?.createdAt}</li>
-            </ul>
-            <ul className="post__utils-box">
-              {post?.category && (
-                <li className="post__category">{post?.category}</li>
-              )}
-              <li className="post__delete" onClick={handleDelete}>
-                삭제
-              </li>
-              <li className="post__edit">
-                <Link to={`/posts/edit/${post?.id}`}>수정</Link>
-              </li>
-            </ul>
-            <p className="post__text post__text--pre-wrap">{post?.content}</p>
-          </section>
+          <>
+            <section className="post__box">
+              <h1 className="post__title">{post?.title}</h1>
+              <ul className="post__profile-box">
+                <li className="post__profile" />
+                <li className="post__author-name">{post?.email}</li>
+                <li className="post__date">{post?.createdAt}</li>
+              </ul>
+              <ul className="post__utils-box">
+                {post?.category && (
+                  <li className="post__category">{post?.category}</li>
+                )}
+                <li className="post__delete" onClick={handleDelete}>
+                  삭제
+                </li>
+                <li className="post__edit">
+                  <Link to={`/posts/edit/${post?.id}`}>수정</Link>
+                </li>
+              </ul>
+              <p className="post__text post__text--pre-wrap">{post?.content}</p>
+            </section>
+            <Comments />
+          </>
         ) : (
           <Loader />
         )}
