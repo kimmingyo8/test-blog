@@ -59,7 +59,7 @@ export default function PostDetail() {
               </ul>
               <p className="post__text post__text--pre-wrap">{post?.content}</p>
             </section>
-            <Comments />
+            <Comments post={post} />
           </>
         ) : (
           <Loader />
