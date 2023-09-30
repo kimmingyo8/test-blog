@@ -28,6 +28,14 @@ export interface PostProps {
   updatedAt: string;
   uid: string;
   category?: CategoryType;
+  comments?: CommentInterface[];
+}
+
+export interface CommentInterface {
+  content: string;
+  uid: string;
+  email: string;
+  createdAt: string;
 }
 
 type TabType = 'all' | 'my';
