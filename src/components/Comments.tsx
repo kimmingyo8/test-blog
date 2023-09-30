@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
-import { PostProps } from './PostList';
-import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { CommentInterface, PostProps } from './PostList';
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { db } from 'firebaseApp';
 import AuthContext from 'context/AuthContext';
 import { toast } from 'react-toastify';
@@ -13,8 +13,6 @@ interface CommentsProps {
 export default function Comments({ post, getPost }: CommentsProps) {
   const [comment, setComment] = useState('');
   const { user } = useContext(AuthContext);
-
-  console.log(post);
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -59,6 +57,20 @@ export default function Comments({ post, getPost }: CommentsProps) {
     }
   };
 
+  const handleDeleteComment = async (data: CommentInterface) => {
+    const confirm = window.confirm('해당 댓글을 삭제하시겠습니까?');
+    if (confirm && post.id) {
+      const postRef = doc(db, 'posts', post.id);
+      await updateDoc(postRef, {
+        comments: arrayRemove(data),
+      });
+      toast.success('댓글을 삭제하였습니다.');
+
+      //문서 업데이트
+      await getPost(post.id);
+    }
+  };
+
   return (
     <section className="comments">
       <form onSubmit={onSubmit} className="comments__form">
@@ -92,7 +104,14 @@ export default function Comments({ post, getPost }: CommentsProps) {
               <div className="comment__profile-box">
                 <p className="comment__email">{comment?.email}</p>
                 <p className="comment__date">{comment?.createdAt}</p>
-                <button className="comment__delete">삭제</button>
+                {comment.uid === user?.uid && (
+                  <button
+                    className="comment__delete"
+                    onClick={() => handleDeleteComment(comment)}
+                  >
+                    삭제
+                  </button>
+                )}
               </div>
               <p className="comment__text">{comment?.content}</p>
             </li>

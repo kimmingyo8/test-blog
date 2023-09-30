@@ -57,7 +57,7 @@ export default function PostForm() {
       }
     } catch (error: any) {
       toast.error(error?.code);
-      console.log(e);
+      console.log(error);
     }
   };
 
